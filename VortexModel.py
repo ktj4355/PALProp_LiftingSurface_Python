@@ -3,7 +3,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 import numpy.linalg as LA
 from functools import cache
-from numba import njit
+from numba import njit,jit
 #@cache
 @njit(cache=True)
 def Vortex_Scully(A, B, ColocationPoint, vortexStrength, rc):
