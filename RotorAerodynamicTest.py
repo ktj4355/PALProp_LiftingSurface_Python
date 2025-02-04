@@ -20,4 +20,4 @@ FlowVec_total= FreeVel+airTanVel_vec
 
 sectionVec_e1=r
 print(FlowVec_total)
-print(np.arctan2(FlowVec_total[2]))
+print(np.arctan2(FlowVec_total[2],FlowVec_total[2]))
