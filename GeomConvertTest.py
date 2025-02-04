@@ -33,10 +33,10 @@ Prop_TiltAngle=90 # Drone
 Prop_TiltPhi=0 # Forward Direction
 
 # Vehicle Condition
-Vehecle_Speed_x = 12 # Forward (phi = 0)
-Vehecle_Speed_y = 0 # Side    (phi = 90)
-Vehecle_Speed_z = 0 # Ascend  (상승속도)
-G_Vehecle_Speed_vec=np.array([Vehecle_Speed_x,Vehecle_Speed_y,Vehecle_Speed_z])
+vehicle_speed_x = 12 # Forward (phi = 0)
+vehicle_speed_y = 0 # Side    (phi = 90)
+vehecle_speed_z = 0 # Ascend  (상승속도)
+G_Vehecle_Speed_vec=np.array([vehicle_speed_x, vehicle_speed_y, vehecle_speed_z])
 G_Inflow_Vehecle_vec=-G_Vehecle_Speed_vec
 #Freestream_Foward  = -Vehecle_Speed_Forward
 #Freestream_Foward  = -Vehecle_Speed_Forward
