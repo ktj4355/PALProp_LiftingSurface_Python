@@ -30,7 +30,7 @@ TiltAngle_Fixedwing=0  # 90deg is perpendicular to Forward Direction
 TiltAngle_drone=90-TiltAngle_Fixedwing  # 90deg is perpendicular to Forward Direction
 #PropTiltAngle=TiltAngle_Fixedwing
 Prop_TiltAngle=90 # Drone
-Prop_TiltPhi=0 # Forward Direction
+Prop_TiltPhi=90 # Forward Direction
 
 # Vehicle Condition
 vehicle_speed_x = 12 # Forward (phi = 0)
@@ -86,7 +86,7 @@ G_Inflow_Disk_tanX_vec=G_Inflow_Disk_tanX*Unit_Disk_tanX
 G_Inflow_Disk_tanY_vec=G_Inflow_Disk_tanY*Unit_Disk_tanY
 
 R=1.25
-Now_Azimuth_Angle=90
+Now_Azimuth_Angle=0
 
 
 
@@ -113,7 +113,7 @@ BLP_inflow_chord_neg_vec=BLP_unit_chord_neg*BLP_inflow_Chord_neg
 BLP_inflow_span_vec=BLP_unit_span*BLP_inflow_Span
 BLP_inflow_axis_vec=BLP_unit_axis*BLP_inflow_Axis
 
-print(BLP_inflow_Axis)
-print(BLP_inflow_Span)
-print(BLP_inflow_Chord_neg)
+print("Axis : ",BLP_inflow_Axis)
+print("Chord : ",BLP_inflow_Chord_neg)
+print("Span : ",BLP_inflow_Span)
 
