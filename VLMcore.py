@@ -138,7 +138,7 @@ class Rotor:
 
         # Calculation Setup
         self.alt = 0 #m
-        self.vFree = [0, 0, 0] #FreeVelocity
+        self.vFree = [0, 0, 5] #FreeVelocity
         self.nAzmuth = 36 #slice of rotation
         self.dAngle = 0
         self.RPM = 3000 #rev / min
