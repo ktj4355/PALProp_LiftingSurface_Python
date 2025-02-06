@@ -178,6 +178,7 @@ class Rotor:
         self.PannelGeom_Thickness = np.zeros([self.inputGeom.shape[0] - 1, 1])
         self.PannelGeom =np.zeros([self.inputGeom.shape[0] - 1, 5])
         self.collocation_point_local = np.zeros([self.inputGeom.shape[0] - 1, 2])
+
         self.Calc_PanelGeom()
 
         # initial BoundGammaVector
