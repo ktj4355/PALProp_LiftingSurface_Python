@@ -101,9 +101,6 @@ class MainClass(QMainWindow, form_class):
                 newAngle=newAngle-360
                 Rotcnt=Rotcnt+1
 
-
-
-
             if totalAngle/360 > 1:
                 break;
             #R1.Calc_Bound_Induced_Velocity_XYZ()
