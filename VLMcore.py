@@ -161,7 +161,7 @@ class Rotor:
         # 함수 호출로 컴파일 강제 수행
         _ = Vortex_Scully(A, B, ColocationPoint, vortexStrength, rc)
         self.Calc_Wake_Induced_Velocity_XYZ()
-    def  Calc_Setting(self):
+    def Calc_Setting(self):
         self.ZeroGeom = np.array([0, 0, 2 * self.R_hub, 0, 0.008])
         self.AR = 2 * (self.R) / self.bmean
         self.D = self.R * 2  # m
@@ -296,16 +296,10 @@ class Rotor:
             numeric_data.append(numeric_row)
         csv_file.close()
         self.inputGeom=np.array(numeric_data)
-        self.readGeometry()
-        return np.array(numeric_data)
-
-    def readGeometry(self):
-        self.R = self.inputGeom[self.inputGeom.shape[0]-1,1]
+        self.R = self.inputGeom[self.inputGeom.shape[0] - 1, 1]
         self.bmean = np.median(self.inputGeom[:, 2])
         self.Calc_Setting()
-        self.Prop_Tilt_set()
-        self.AzimuthSet()
-        self.RadiusVectorSet()
+        return np.array(numeric_data)
 
 
     def Calc_Iij_BoundMatrix(self):
@@ -423,6 +417,7 @@ class Rotor:
             freeVel[:,ind*3+2]=(freeVel[:,ind*3+2]*self.vFree[2]).copy()
 
         oldMarker=oldMarker+(freeVel+self.WakeMarker_Vel)*self.dt
+
        # print(freeVel*self.dt)
 
         # 각 Wake Point에 유도되는 속도 계산 코드
