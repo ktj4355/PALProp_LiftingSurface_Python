@@ -87,36 +87,41 @@ class MainClass(QMainWindow, form_class):
         self.txt_GeomFileName.setText(fname[0])
 
     def WakeUpdate_test(self):
+        itercnt=0
         Rotcnt = 0
         totalAngle = 0
         start= time.time()
         while(1):
             dAngle=10
-
             nowAngle=R1.now_Angle
+            key = R1.VLM(nowAngle)
+            if key == 0:
+                print("수렴하지 않았습니다")
+
             totalAngle=totalAngle+dAngle
             newAngle=nowAngle+dAngle
-
             if newAngle>=360:
                 newAngle=newAngle-360
                 Rotcnt=Rotcnt+1
-
             if totalAngle/360 > 1:
-                break;
+                break
             #R1.Calc_Bound_Induced_Velocity_XYZ()
-            R1.Calc_Wake_Induced_Velocity_XYZ()
-            R1.VLM()
+            #R1.Calc_Wake_Induced_Velocity_XYZ()
+
             R1.Calc_Wake_Velocity()
             R1.Calc_Blade_Rotation_Position_XYZ(newAngle)
             R1.WakeUpdate()
 
 
-            print(totalAngle/360)
-            print(np.mean(R1.Vel_colocation_Total_XYZ[:,2]))
-            print(f"{time.time() - start:.4f} sec")
-            print()
+            #print(totalAngle/360)
+            #print(np.mean(R1.Vel_colocation_Total_XYZ[:,2]))
+            #print(f"{time.time() - start:.4f} sec")
+            #print()
+            itercnt=itercnt+1
+            if itercnt==10:
+                R1.clearLastWake(5)
         #print(totalAngle)
-        print(f"{time.time() - start:.4f} sec")
+        #print(f"{time.time() - start:.4f} sec")
         geompoint_LE = R1.now_Prop_position_LE
         geompoint_BD = R1.now_Prop_position_Bound
         geompoint_TE = R1.now_Prop_position_TE
@@ -161,9 +166,9 @@ class MainClass(QMainWindow, form_class):
 
     def reset(self):
 
-        R1. __init__()
-        self.PlotWidget.canvas.axes.cla()
-
+        #R1. __init__()
+        #self.PlotWidget.canvas.axes.cla()
+        R1.VLM(0)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

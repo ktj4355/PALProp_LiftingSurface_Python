@@ -4,6 +4,7 @@ from matplotlib import pyplot as plt
 import numpy.linalg as LA
 from functools import cache
 from numba import njit
+
 #@cache
 @njit(cache=True)
 def Vortex_Scully(A, B, ColocationPoint, vortexStrength, rc):
@@ -92,27 +93,30 @@ def Vortex_bio(A,B,ColocationPoint,vortexStrength,rc):
     vortexFactor = vortexStrength / (4 * np.pi * r)
     Vout = vortexFactor * (cosA - cosB) * np.cross(r1, r2) / (LA.norm(np.cross(r1, r2)))
     return Vout.copy()
+@njit(cache=True)
 def Vortex_Vatistas(A,B,ColocationPoint,vortexStrength,rc,n):
     r1 = (ColocationPoint - A).copy()
     r2 = (ColocationPoint - B).copy()
+    dL = abs(LA.norm(A - B))
+    r = LA.norm(np.cross(r1, r2)) / dL
+    Vout = np.array([0.0, 0.0, 0.0], dtype=np.float64)  # dtype=np.float64로 수정
 
+    if r < 0.000001 or vortexStrength < 0.00001:
+        return Vout
     r1s = LA.norm(r1)
     r2s = LA.norm(r2)
-    dL = abs(LA.norm(A - B))
 
     cosA = np.dot(r1, (B - A)) / (r1s * dL)
     cosB = np.dot(r2, (B - A)) / (r2s * dL)
-    r = LA.norm(np.cross(r1, r2)) / dL
-    if r < 0.000001:
-        Vout = np.array([0, 0, 0])
-        return Vout.copy()
 
     r_norm = r / rc
     a = 1.25643
 
     vortexFactor=(vortexStrength/(4*np.pi*r))*((r**2)/( (rc**(2*n)+r**(2*n))**(1/n) ))
     Vout = vortexFactor * (cosA - cosB) * np.cross(r1, r2) / (LA.norm(np.cross(r1, r2)))
-    return Vout.copy()
+    return Vout
+    #Vout = vortexFactor * (cosA - cosB) * np.cross(r1, r2) / (LA.norm(np.cross(r1, r2)))
+    #return Vout
 
 def PlotVortex():
     x=np.linspace(0.02,0.6,100)
