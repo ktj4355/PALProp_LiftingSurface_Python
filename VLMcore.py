@@ -136,7 +136,7 @@ class Rotor:
         self.bmean=1
         self.R_hub=0.084
             # 틸트 세팅
-
+        self.rc_ratio = 0.15
 
         # Calculation Setup
         self.alt = 0 #m
@@ -149,7 +149,7 @@ class Rotor:
             self.vFree[1] == 0.00001
         elif self.vFree[2]==0:
             self.vFree[2] == 0.00001
-        self.nAzmuth = 18 #slice of rotation
+        self.nAzmuth = 36 #slice of rotation
         self.Tilt_angle=0
         self.Tilt_Phi=0
 
@@ -222,8 +222,9 @@ class Rotor:
         #self.now_Gamma_bound = np.ones([self.inputGeom.shape[0]-1, 1])
 
         # Vortex Core Radius
-        self.rc_panel=(self.PannelGeom_Chorld*0.1).copy()
-        self.rc_Geom=(self.BladeChord*0.1).copy()
+
+        self.rc_panel=(self.PannelGeom_Chorld*self.rc_ratio).copy()
+        self.rc_Geom=(self.BladeChord*self.rc_ratio).copy()
         print(self.rc_panel)
         print(self.rc_Geom)
         # Current Position Initializing
@@ -694,6 +695,7 @@ class Rotor:
     def VLM(self,Angle_deg):
         # Bound Gamma 추정
         # Induced Velocity 계산
+        global T
         key=0
         self.Calc_Blade_Rotation_Position_XYZ(Angle_deg)
         self.Calc_Iij_BoundMatrix()
@@ -711,20 +713,22 @@ class Rotor:
        # T,Q,P,Fx,Fy,Fz=(0, 0, 0, 0, 0, 0)
         oldT,oldQ,oldP,oldFx,oldFy,oldFz=(999, 999, 999, 999, 999, 999)
         self.Calc_Bound_Induced_Velocity_XYZ()
-        self.Calc_Wake_Induced_Velocity_XYZ()
-        self.Vel_colocation_Total_XYZ = self.Vel_colocation_Bound_Induced_XYZ + self.Vel_colocation_Wake_Induced_XYZ
+        #self.Calc_Wake_Induced_Velocity_XYZ()
+        self.Vel_colocation_Total_XYZ = self.Vel_colocation_Bound_Induced_XYZ# + self.Vel_colocation_Wake_Induced_XYZ
 
         # 현재 위치에 대해 rR별로 계산
         iter=0
         regvel=0
         Old_regVel=999
+        T, Q, P, F, Fx, Fy, Fz = (0, 0, 0, 0, 0, 0, 0)
+        #self.Calc_Wake_Induced_Velocity_XYZ()
+
         while iter<500:
             iter=iter+1
 
             T, Q, P, F,Fx, Fy, Fz = (0,0, 0, 0, 0, 0, 0)
             self.Calc_Bound_Induced_Velocity_XYZ()
-            self.Calc_Wake_Induced_Velocity_XYZ()
-            self.Vel_colocation_Total_XYZ = self.Vel_colocation_Bound_Induced_XYZ + self.Vel_colocation_Wake_Induced_XYZ
+            self.Vel_colocation_Total_XYZ = self.Vel_colocation_Bound_Induced_XYZ #+ self.Vel_colocation_Wake_Induced_XYZ
 
             for r_idx in range(rR.shape[0]):
 
@@ -760,6 +764,9 @@ class Rotor:
                 T=T+Tds
                 Q=Q+Qds
                 F=F+Fds
+
+
+
                # print(V_effective)
                 Boundgamma=b*V_effective*Cl*0.5
 
@@ -782,7 +789,8 @@ class Rotor:
                     Returns:
                       - np.array([cl, cd]): 계산된 양력 및 항력 계수
                 """
-
+            n = self.RPM / 60
+            P = 2 * np.pi * n * Q
             Tvec=T*self.BLP_G_unit_axis
             Fvec = -F * self.BLP_G_unit_tan
             TotalForce_vec=Tvec+Fvec
@@ -798,8 +806,8 @@ class Rotor:
             else:
                 oldT=T
                 Old_regVel=regVel
-        print(T, np.average(self.Gamma_bound), AoA)
-        return key
+        #print(T,Q,P,regVel)
+        return key,T[0],Q[0],P[0],regVel
 
 
         # 추력 계산

@@ -90,20 +90,23 @@ class MainClass(QMainWindow, form_class):
         itercnt=0
         Rotcnt = 0
         totalAngle = 0
+        #R1.rc_ratio=0.15
         start= time.time()
         while(1):
             dAngle=10
             nowAngle=R1.now_Angle
-            key = R1.VLM(nowAngle)
+            key,T,Q,P,reg= R1.VLM(nowAngle)
+            totalAngle = totalAngle + dAngle
+            print(totalAngle,T,Q,P,reg)
             if key == 0:
                 print("수렴하지 않았습니다")
 
-            totalAngle=totalAngle+dAngle
+
             newAngle=nowAngle+dAngle
             if newAngle>=360:
                 newAngle=newAngle-360
                 Rotcnt=Rotcnt+1
-            if totalAngle/360 > 1:
+            if totalAngle/360 > 3:
                 break
             #R1.Calc_Bound_Induced_Velocity_XYZ()
             #R1.Calc_Wake_Induced_Velocity_XYZ()
